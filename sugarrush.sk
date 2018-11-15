@@ -1,0 +1,23 @@
+#Skript by /u/ElectriCobra_
+
+Options:
+	prefix: &8[&4Hemorrhage&8]&7
+	
+command /sugarrush <text>:
+	aliases: /sr, /sugar
+	permission: skript.op
+	trigger:
+		if arg-1 is equal to "enable" or "on":
+			set {scen::sr} to true
+			broadcast "{@prefix} Sugar Rush &aEnabled!"
+		else if arg-1 is equal to "disable" or "off":
+			delete {scen::sr}
+			broadcast "{@prefix} Sugar Rush &cDisabled!"
+			
+on right click:
+	{scen::sr} is true
+	if tool of player is sugar:
+		remove speed from the player
+		remove 1 sugar from the player
+		apply speed 2 to the player for 10 seconds
+		command "/playsound random.eat %player% ~ ~ ~ 1 0.5 1"
