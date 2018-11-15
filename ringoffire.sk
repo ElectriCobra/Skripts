@@ -1,0 +1,64 @@
+Options:
+	prefix: &8[&4Hemorrhage&8]&7
+
+command /rof <text>:
+	permission: skript.op
+	trigger:
+		if arg-1 is equal to "enable" or "on":
+			set {rof} to true
+			broadcast "{@prefix} Ring of Fire &aEnabled!"
+		if arg-1 is equal to "disable" or "off":
+			delete {rof}
+			broadcast "{@prefix} Ring of Fire &cDisabled!"
+
+on death of a player:
+	if {rof} is true:
+		set {rofcenter::loc::%victim%} to the player's location
+		set {_n} to the block 3 meters north of {rofcenter::loc::%victim%}
+		set {_n2} to the block 1 below {_n}
+		set {_s} to the block 3 meters south of {rofcenter::loc::%victim%}
+		set {_s2} to the block 1 below {_s}
+		set {_w} to the block 3 meters west of {rofcenter::loc::%victim%}
+		set {_w2} to the block 1 below {_w}
+		set {_e} to the block 3 meters east of {rofcenter::loc::%victim%}
+		set {_e2} to the block 1 below {_e}
+		set {_nw} to the block 2 meters northwest of {rofcenter::loc::%victim%}
+		set {_nw2} to the block 1 below {_nw}
+		set {_ne} to the block 2 meters northeast of {rofcenter::loc::%victim%}
+		set {_ne2} to the block 1 below {_ne}
+		set {_sw} to the block 2 meters southwest of {rofcenter::loc::%victim%}
+		set {_sw2} to the block 1 below {_sw}
+		set {_se} to the block 2 meters southeast of {rofcenter::loc::%victim%}
+		set {_se2} to the block 1 below {_se}
+		set block at {_n2} to netherrack
+		set block 1 meters west of {_n2} to netherrack
+		set block 1 meters east of {_n2} to netherrack
+		set block at {_s2} to netherrack
+		set block 1 meters west of {_s2} to netherrack
+		set block 1 meters east of {_s2} to netherrack
+		set block at {_w2} to netherrack
+		set block 1 meters north of {_w2} to netherrack
+		set block 1 meters south of {_w2} to netherrack
+		set block at {_e2} to netherrack
+		set block 1 meters north of {_e2} to netherrack
+		set block 1 meters south of {_e2} to netherrack
+		set block at {_nw2} to netherrack
+		set block at {_ne2} to netherrack
+		set block at {_sw2} to netherrack
+		set block at {_se2} to netherrack
+		set block at {_n} to fire
+		set block 1 meters west of {_n} to fire
+		set block 1 meters east of {_n} to fire
+		set block at {_s} to fire
+		set block 1 meters west of {_s} to fire
+		set block 1 meters east of {_s} to fire
+		set block at {_w} to fire
+		set block 1 meters north of {_w} to fire
+		set block 1 meters south of {_w} to fire
+		set block at {_e} to fire
+		set block 1 meters north of {_e} to fire
+		set block 1 meters south of {_e} to fire
+		set block at {_nw} to fire
+		set block at {_ne} to fire
+		set block at {_sw} to fire
+		set block at {_se} to fire
