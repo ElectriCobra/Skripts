@@ -1,0 +1,36 @@
+#Skript by /u/ElectriCobra_
+
+Options:
+	prefix: &8[&4Hemorrhage&8]&7
+	
+command /permakill <text> <world>:
+	aliases: /pk
+	permission: skript.op
+	trigger:
+		if arg-1 is equal to "enable" or "on":
+			set {permakill} to true
+			set {pkworld} to arg-2
+			set {pkday} to true
+			execute console command "/time set noon %{pkworld}%"
+			make command sender execute command "/mvtp %{pkworld}%"
+			make command sender execute command "/gamerule doDaylightCycle false"
+			broadcast "{@prefix} Permakill &aEnabled &7in &e%{pkworld}%!"
+		else if arg-1 is equal to "disable" or "off":
+			delete {scen::pk}
+			delete {pkday}
+			execute console command "/time set 0 %{pkworld}%"
+			make command sender execute command "/mvtp %{pkworld}%"
+			make command sender execute command "/gamerule doDaylightCycle true"
+			broadcast "{@prefix} Permakill &cDisabled &7in &e%{pkworld}%!"
+			delete {pkworld}
+			
+on death of player:
+	{permakill} is true
+	if {pkday} is true:
+		execute console command "/time set 18000 %{pkworld}%"
+		broadcast "{@prefix} It is now &1Permanight!"
+		set {pkday} to false
+	else if {pkday} is false:
+		execute console command "/time set noon %{pkworld}%"
+		broadcast "{@prefix} It is now &ePermaday!"
+		set {pkday} to true
