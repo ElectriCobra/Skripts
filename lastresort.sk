@@ -1,0 +1,34 @@
+Options:
+	prefix: &8[&4Hemorrhage&8]&7
+	
+command /lastresort <text>:
+	permission: skript.op
+	trigger:
+		if arg-1 is equal to "enable" or "on":
+			set {scen::lr} to true
+			broadcast "{@prefix} Last Resort &aEnabled!"
+		if arg-1 is equal to "disable" or "off":
+			delete {scen::lr}
+			broadcast "{@prefix} Last Resort &cDisabled!"
+			
+command /lr:
+	aliases: /ls
+	trigger:
+		if {scen::lr} is true:
+			if command sender's health is below 1.5:
+				if command sender does not have wither effect:
+					heal the player by 10 hearts
+					message "{@prefix} You used your last resort!"
+					apply wither 1 to the player for 999 days
+				else:
+					message "{@prefix} You have already used your last resort!" to player
+			else:
+				message "{@prefix} You need to be at 1 heart or less!" to player
+		else:
+			message "{@prefix} Last Resort is not enabled!" to player
+			
+on drink of milk:
+	{scen::lr} is true
+	player has wither effect
+	cancel event
+	message "{@prefix} You cannot cheat death in Last Resort!"
