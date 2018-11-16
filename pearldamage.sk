@@ -1,0 +1,39 @@
+Options:
+	prefix: &8[&4Hemorrhage&8]&7
+	
+command /epdmg [<text>] [<int>]:
+	usage: /epdmg <set:off> <hearts>
+	permission: skript.op
+	aliases: /enderdmg, /enderpearldamage, /epdamage, /enderdamage
+	trigger:
+		if arg-1 is not set:
+			message "/epdmg <set:off> <hearts>"
+		else if arg-1 is equal to "off":
+			delete {pearldamage}
+			broadcast "{@prefix} Pearl Damage &cDisabled!"
+		else if arg-1 is equal to "set":
+			if arg-2 is equal to 0:
+				delete {pearldamage}
+				broadcast "{@prefix} Pearl Damage &cDisabled!"
+			else:
+				set {pearldamage} to arg-2
+				if {pearldamage} is equal to 1:
+					broadcast "{@prefix} Pearl Damage is now &a%{pearldamage}% heart!"
+				else:
+					broadcast "{@prefix} Pearl Damage is now &a%{pearldamage}% hearts!"
+		else:
+			message "/epdmg <set:off> <hearts>"
+			
+on projectile hit:
+	event-entity is an ender pearl
+	set {enderpearl::%shooter%} to true
+	
+on damage:
+	damage cause is fall
+	{enderpearl::%victim%} is set
+	delete {enderpearl::%victim%}
+	if {pearldamage} is set:
+		cancel event
+		damage the victim by {pearldamage} hearts
+	else:
+		cancel event
