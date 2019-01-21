@@ -1,0 +1,18 @@
+Options:
+	P: &8[&4Hemorrhage&8]&7
+	
+command /antiburn <text>:
+	permission: skript.op
+	usage: /antiburn <on/off>
+	trigger:
+		if arg-1 is "enable" or "on":
+			set {antiburn} to true
+			broadcast "{@P} Antiburn &aEnabled!"
+		if arg-1 is "disable" or "off":
+			delete {antiburn}
+			broadcast "{@P} Antiburn &cDisabled!"
+
+on damage of a entity:
+	if "%victim%" is "dropped item":
+		if "%damage type%" is "burning" or "lava" or "fire":
+			cancel event
