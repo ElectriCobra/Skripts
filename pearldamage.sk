@@ -32,8 +32,6 @@ on damage:
 	damage cause is fall
 	{enderpearl::%victim%} is set
 	delete {enderpearl::%victim%}
+	cancel event
 	if {pearldamage} is set:
-		cancel event
 		damage the victim by {pearldamage} hearts
-	else:
-		cancel event
