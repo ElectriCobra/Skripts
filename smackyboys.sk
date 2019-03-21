@@ -1,0 +1,28 @@
+# Skript by ElectriCobra
+
+Options:
+	prefix: &8[&4Hemorrhage&8]&7
+
+command /smackyboys <text>:
+	permission: skript.op
+	trigger:
+		if arg-1 is equal to "enable" or "on":
+			set {scen::smack} to true
+			broadcast "{@prefix} Smacky Boys &aEnabled!"
+		if arg-1 is equal to "disable" or "off":
+			delete {scen::smack}
+			broadcast "{@prefix} Smacky Boys &cDisabled!"
+			
+on inventory click:
+	if {scen::smack} is true:
+		loop all items in the inventory of player:
+			if loop-item is sword:
+				if loop-item is not enchanted with knockback 10:
+					enchant loop-item with knockback 10
+					
+on inventory close:
+	if {scen::smack} is true:
+		loop all items in the inventory of player:
+			if loop-item is sword:
+				if loop-item is not enchanted with knockback 10:
+					enchant loop-item with knockback 10
