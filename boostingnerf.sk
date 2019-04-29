@@ -1,0 +1,20 @@
+#Skript by ElectriCobra
+
+Options:
+	P: &8[&4Hemorrhage&8]&7
+	
+command /boosting <text>:
+	permission: skript.op
+	trigger:
+		if arg-1 is "enable" or "on":
+			set {boosting} to true
+			broadcast "{@P} Boosting &aEnabled!"
+		else if arg-1 is "disable" or "off":
+			delete {boosting}
+			broadcast "{@P} Boosting &cDisabled!"
+			
+on damage of player:
+	{boosting} is not set
+	({Teams.InTeam::%attacker%}) is ({Teams.InTeam::%victim%})
+	damage is less than 1
+	cancel event
