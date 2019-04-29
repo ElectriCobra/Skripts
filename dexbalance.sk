@@ -1,0 +1,75 @@
+#Skript by ElectriCobra
+
+Options:
+	P: &8[&4Hemorrhage&8]&7
+	
+command /dexbalance <text>:
+	aliases: /dexbal
+	permission: skript.op
+	trigger:
+		if arg-1 is "enable" or "on":
+			broadcast "{@P} Dex Balance &aEnabled!"
+			set {scen::dexbal} to true
+			loop all players:
+				gamemode of loop-player is survival
+				set {DexBal.DiaLeft::%loop-player%} to 5
+				set {DexBal.GoldLeft::%loop-player%} to 48
+		if arg-1 is "disable" or "off":
+			broadcast "{@P} Dex Balance &cDisabled!"
+			delete {scen::dexbal}
+			delete {DexBal.DiaLeft::*}
+			delete {DexBal.GoldLeft::*}
+			
+command /dexcount <text>:
+	trigger:
+		if {scen::dexbal} is true:
+			if arg-1 is "gold":
+				if {DexBal.GoldLeft::%command sender%} is greater than 0:
+					send "{@P} You can mine &a%{DexBal.GoldLeft::%command sender%}%&r more &6gold&r."
+				else:
+					send "{@P} You cannot mine any more gold! Go fight!"
+			else if arg-1 is "diamond" or "diamonds":
+				if {DexBal.DiaLeft::%command sender%} is greater than 0:
+					send "{@P} You can mine &a%{DexBal.DiaLeft::%command sender%}%&r more &bdiamonds&r."
+				else:
+					send "{@P} You cannot mine any more diamonds! Go fight!"
+		else:
+			send "{@P} Dex Balance is &cDisabled!"
+
+on mine of gold ore:
+	{scen::dexbal} is true
+	if {DexBal.GoldLeft::%player%} is less than 1:
+		cancel event
+		set event-block to air
+		send "{@P} You cannot mine any more gold! Go fight!"
+	else if {DexBal.GoldLeft::%player%} is 1:
+		subtract 1 from {DexBal.GoldLeft::%player%}
+		send "{@P} You cannot mine any more gold! Go fight!"
+	else:
+		subtract 1 from {DexBal.GoldLeft::%player%}
+	
+on mine of diamond ore:
+	{scen::dexbal} is true
+	if {DexBal.DiaLeft::%player%} is less than 1:
+		cancel event
+		set event-block to air
+		send "{@P} You cannot mine any more diamonds! Go fight!"
+	else if {DexBal.DiaLeft::%player%} is 1:
+		subtract 1 from {DexBal.DiaLeft::%player%}
+		send "{@P} You cannot mine any more diamonds! Go fight!"
+	else:
+		subtract 1 from {DexBal.DiaLeft::%player%}
+		
+on damage of player:
+	{scen::dexbal} is true
+	attacker is a player
+	set {lastattacker::%victim%} to attacker
+	wait 3 seconds
+	{lastattacker::%victim%} is attacker
+	delete {lastattacker::%victim%}
+		
+on death of player:
+	{scen::dexbal} is true
+	add 2 to {DexBal.DiaLeft::%{lastattacker::%victim%}%}
+	add 16 to {DexBal.GoldLeft::%{lastattacker::%victim%}%}
+	message "{@P} You killed a player! You can now mine &a2 more &bdiamonds and &a16 more &6gold&r!" to {lastattacker::%victim%}
