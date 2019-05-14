@@ -1,0 +1,35 @@
+# Skript by /u/ElectriCobra_
+
+options:
+	P: &8[&4Hemorrhage&8]&7
+	
+command /anvilprogression <text>:
+	aliases: /avp, /anvp
+	usage: /anvilprogression <on/off>
+	permission: skript.op
+	trigger:
+		if arg-1 is "enable" or "on":
+			broadcast "{@P} Anvil Progression &aEnabled!"
+			set {scen::avp} to true
+			loop all players:
+				gamemode of loop-player is survival
+				set {avp::%loop-player%} to 0
+		else if arg-1 is "disable" or "off":
+			broadcast "{@P} Anvil Progression &cDisabled!"
+			delete {scen::avp}
+			delete {avp::*}
+			
+on death of player:
+	{scen::avp} is true
+	attacker is a player
+	add 1 to {avp::%attacker%}
+	send "{@P} You killed a player! You now have %{avp::%attacker%}% anvil uses!" to attacker
+
+on anvil combine:
+	{scen::avp} is true
+	if {avp::%player%} is greater than 0:
+		remove 1 from {avp::%player%}
+		message "{@P} You now have %{avp::%player%}% anvil uses left!"
+	else:
+		cancel event
+		message "{@P} You have no anvil uses!"
