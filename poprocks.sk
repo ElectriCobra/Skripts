@@ -1,0 +1,77 @@
+#Skript by ElectriCobra
+#Requirements:
+#Skript, HolographicDisplays, HolographicDisplaysAddon
+
+options:
+	P: &8[&4Hemorrhage&8]&7
+
+on skript load:
+	set {poprocks::force} to 2
+	set {poprocks::time} to 5
+	set {poprocks::chance} to 5
+	
+command /poprocks [<text>] [<int>]:
+	trigger:
+		if arg-1 is not set:
+			if sender has permission "skript.op":
+				send "{@P} Usage: &c/poprocks <on/off/force/time/chance> <force/seconds/%% chance>"
+			send "{@P} Pop Rocks: %{poprocks::ind}%"
+			send "{@P} &4Force: &a%{poprocks::force}%"
+			send "{@P} &6Time: &a%{poprocks::time}%"
+			send "{@P} &2Chance: &a%{poprocks::chance}%"
+		else if arg-1 is "on":
+			if sender does not have permission "skript.op":
+				send "&cYou do not have permission to use this command."
+			else:
+				set {poprocks::ind} to "&aEnabled."
+				broadcast "{@P} Pop Rocks %{poprocks::ind}%"
+		else if arg-1 is "off":
+			if sender does not have permission "skript.op":
+				send "&cYou do not have permission to use this command."
+			else:
+				set {poprocks::ind} to "&cDisabled."
+				broadcast "{@P} Pop Rocks %{poprocks::ind}%"
+		else if arg-1 is "force":
+			if sender does not have permission "skript.op":
+				send "&cYou do not have permission to use this command."
+			else:
+				if arg-2 is not set:
+					send "{@P} Usage: &c/poprocks <on/off/force/time/chance> <force/seconds/%% chance>"
+				else:
+					set {poprocks::force} to arg-2
+					broadcast "{@P} Set force of explosion to &a%{poprocks::force}%."
+		else if arg-1 is "time":
+			if sender does not have permission "skript.op":
+				send "&cYou do not have permission to use this command."
+			else:
+				if arg-2 is not set:
+					send "{@P} Usage: &c/poprocks <on/off/force/time/chance> <force/seconds/%% chance>"
+				else:
+					set {poprocks::time} to arg-2
+					broadcast "{@P} Set seconds until explosion to &a%{poprocks::time}%."
+		else if arg-1 is "chance":
+			if sender does not have permission "skript.op":
+				send "&cYou do not have permission to use this command."
+			else:
+				if arg-2 is not set:
+					send "{@P} Usage: &c/poprocks <on/off/force/time/chance> <force/seconds/%% chance>"
+				else:
+					set {poprocks::chance} to arg-2
+					broadcast "{@P} Set percent chance to explode to &a%{poprocks::chance}%%%"
+					
+on place of cobblestone:
+	if {poprocks::ind} is not "&cDisabled.":
+		chance of {poprocks::chance}%:
+			set {_hologram} to new hologram at location 1 above event-block
+			set {_c} to {poprocks::time}
+			append text line "&c%{_c}%" to holo {_hologram} at line 0
+			loop {poprocks::time} times:
+				wait 1 second
+				subtract 1 from {_c}
+				if {_c} is less than 1:
+					remove hologram {_hologram}
+					set event-block to air
+					create an explosion of force {poprocks::force} at event-block
+				else:
+					clear the lines of holo {_hologram}
+					append text line "&c%{_c}%" to holo {_hologram} at line 0
